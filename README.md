@@ -25,3 +25,9 @@
 - get : Retrieve an analytics event
 - post : Create a new analytics event
 - delete : Remove an analytics event
+
+/login
+- post: Login a user
+
+/logout
+- post: Logout a user
