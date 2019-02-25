@@ -26,8 +26,5 @@
 - post : Create a new analytics event
 - delete : Remove an analytics event
 
-/login
-- post: Login a user
-
-/logout
-- post: Logout a user
+/auth/{login,logout,register}
+- post: login, logout, register a user
