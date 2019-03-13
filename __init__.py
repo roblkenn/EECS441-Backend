@@ -11,7 +11,10 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
-    import auth
+    from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import dataset
+    app.register_blueprint(dataset.bp);
 
     return app
