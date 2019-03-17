@@ -1,6 +1,23 @@
 # EECS441-Backend
 
+# Prerequisites
+1. macOS >= 10.14
+2. XCode >= 10.1
 
+# Download Instructions
+Clone the project
+
+$ git clone https://github.com/roblkenn/EECS441-Backend.git
+
+Navigate to the directory EECS441-Backend
+cd EECS441-Backend
+
+Create a virtual environment
+$ . venv/bin/activate
+
+Install Flask
+
+$ pip install Flask
 
 ## API Endpoints
 
