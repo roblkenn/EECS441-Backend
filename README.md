@@ -6,18 +6,29 @@
 
 # Download Instructions
 Clone the project
-
-$ git clone https://github.com/roblkenn/EECS441-Backend.git
-
+```
+git clone https://github.com/roblkenn/EECS441-Backend.git
+```
 Navigate to the directory EECS441-Backend
+```
 cd EECS441-Backend
-
+```
 Create a virtual environment
-$ . venv/bin/activate
-
+```
+. venv/bin/activate
+```
 Install Flask
+```
+pip install Flask
+```
+Run the APIs using Python3
 
-$ pip install Flask
+# File Structure
+.
+├── README.md
+├── __init__.py
+├── auth.py
+└── dataset.py
 
 ## API Endpoints
 
