@@ -1,8 +1,7 @@
 # EECS441-Backend
 
-# Prerequisites
-1. macOS >= 10.14
-2. XCode >= 10.1
+# Requirements
+1. Python 3.x
 
 # Download Instructions
 Clone the project
@@ -13,15 +12,21 @@ Navigate to the directory EECS441-Backend
 ```
 cd EECS441-Backend
 ```
-Create a virtual environment
+Dependencies
 ```
-. venv/bin/activate
+pip install flask
+pip install azure-cosmosdb-table
 ```
-Install Flask
+Running Flask App in Development Mode
 ```
-pip install Flask
+MacOSX/Linux:
+  export FLASK_APP=__init__.py
+  export FLASK_ENV=development
+  flask run
+
+Windows:
+  Replace export with set
 ```
-Run the APIs using Python3
 
 # File Structure
 <pre>
