@@ -17,4 +17,13 @@ class Purchase(object):
             'response': response,
         }
         return cls(**purchase)
-        
+
+    @classmethod
+    def from_google_play_receipt(cls, receipt):
+        purchase = {
+            'transaction_id': receipt.get('orderId', receipt.get('purchaseToken')),
+            'product_id': receipt['productId'],
+            'quantity': 1,
+            'purchased_at': receipt['purchaseTime']
+        }
+        return cls(**purchase)
