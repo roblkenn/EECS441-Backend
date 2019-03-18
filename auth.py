@@ -68,3 +68,18 @@ def logout():
     # placeholder
     session.clear()
     return "success"
+
+
+@bp.before_app_request
+def get_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+		# get real user data from the database
+        g.user = get_db().execute(
+            'SELECT * FROM user WHERE id = ?', (user_id,)
+        ).fetchone()
+
+    return g.user
