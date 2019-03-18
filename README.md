@@ -62,3 +62,7 @@ Windows:
 
 /auth/{login,logout,register}
 - post: login, logout, register a user
+
+## Reference Material
+[Azure Table Storage Documentation](https://docs.microsoft.com/en-us/azure/cosmos-db/table-storage-how-to-use-python)
+[Flask Documentation](http://flask.pocoo.org/docs/1.0/#)
