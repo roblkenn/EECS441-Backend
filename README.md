@@ -65,4 +65,5 @@ Windows:
 
 ## Reference Material
 [Azure Table Storage Documentation](https://docs.microsoft.com/en-us/azure/cosmos-db/table-storage-how-to-use-python)
+
 [Flask Documentation](http://flask.pocoo.org/docs/1.0/#)
