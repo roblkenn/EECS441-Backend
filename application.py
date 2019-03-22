@@ -1,8 +1,4 @@
-import os
 from flask import Flask
-
-# Use the code below to access environment variables
-# os.environ['WEBSITE_SITE_NAME']
 
 app = Flask(__name__)
 app.config.from_mapping(
