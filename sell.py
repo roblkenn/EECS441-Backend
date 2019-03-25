@@ -18,6 +18,7 @@ def post_preset(uid, user_id, name, price):
 
 def store_preset(uid, user_id, name, meta, binary):
     # store the preset in a database
+    # FIXME! how to present preset data
     get_db().execute(
             'INSERT INTO PRESET VALUES(?,?,?,?)', (uid,name,meta,binary,)
     )
@@ -35,12 +36,6 @@ def verify_owner(uid, user_id):
     if user_id == fetch_id:
         return True
     return False
-
-def sell_preset(uuid):
-    # put preset to market place
-    get_db().execute(
-            'INSERT INTO MARKET_PRESET VALUES(?)', (uuid,)
-    )
 
 @bp.route('/upload', methods=('POST'))
 def upload():
