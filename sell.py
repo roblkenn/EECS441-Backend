@@ -8,18 +8,39 @@ from flask import (
 
 bp = Blueprint('marketplace', __name__, url_prefix='/marketplace')
 
-def do_sell_preset(user_id, preset):
+# api section
+def post_preset(uid, user_id, name, price):
+    # sell preset
+    get_db().execute(
+            'INSERT INTO MARKET VALUES(?,?,?,?,?)', (uid, user_id, name, price,)
+    )
     return 0
 
-def store_preset(uuid, user_id, name, meta, binary):
+def store_preset(uid, user_id, name, meta, binary):
     # store the preset in a database
     get_db().execute(
-            'INSERT INTO PRESET VALUES(?,?,?,?)', (uuid,name,meta,binary,)
+            'INSERT INTO PRESET VALUES(?,?,?,?)', (uid,name,meta,binary,)
     )
     get_db().execute(
             'INSERT INTO PRESET_AUTHOR VALUES(?,?)', (uuid,user_id,)
     )
     return
+
+def verify_owner(uid, user_id):
+    # verify owner
+    get_db().execute(
+        "SELECT * FROM PRESET_AUTHOR WHERE uid=?", (uid,)
+    )
+    fetch_id = get_db().fetchall()[0]
+    if user_id == fetch_id:
+        return True
+    return False
+
+def sell_preset(uuid):
+    # put preset to market place
+    get_db().execute(
+            'INSERT INTO MARKET_PRESET VALUES(?)', (uuid,)
+    )
 
 @bp.route('/upload', methods=('POST'))
 def upload():
@@ -34,16 +55,6 @@ def upload():
     store_preset(preset_id, user.user_id, preset_name, preset_metadata, preset_bin)
 
     return
-
-def verify_owner(uuid, user_id):
-    # TODO
-    return True
-
-def sell_preset(uuid):
-    # put preset to market place
-    get_db().execute(
-            'INSERT INTO MARKET_PRESET VALUES(?)', (uuid,)
-    )
 
 @bp.route('/sell', methods=('GET', 'POST'))
 def sell():
