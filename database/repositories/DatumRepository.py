@@ -1,5 +1,5 @@
 from azure.cosmosdb.table.tableservice import TableService
-from azure.cosmosdb.table.models import Entity
+from azure.cosmosdb.table.models import Entity, EntityProperty, EdmType
 from os import environ
 from database.models.Datum import Datum
 from string import Template
@@ -20,11 +20,11 @@ class DatumRepository:
 		entity = Entity()
 		entity.PartitionKey = self.PartitionKey
 		entity.RowKey = generateRowKey()
-		entity.imageBase64 = datum.imageBase64
-		entity.contrast = datum.contrast
-		entity.brightness = datum.brightness
-		entity.temperature = datum.temperature
-		entity.saturation = datum.saturation
+		entity.imageBase64 = EntityProperty(EdmType.STRING, datum.imageBase64)
+		entity.contrast = EntityProperty(EdmType.DOUBLE, datum.contrast)
+		entity.brightness = EntityProperty(EdmType.DOUBLE, datum.brightness)
+		entity.temperature = EntityProperty(EdmType.DOUBLE, datum.temperature)
+		entity.saturation = EntityProperty(EdmType.DOUBLE, datum.saturation)
 
 		return self.tableService.insert_entity(self.tableName, entity)
 
