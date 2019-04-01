@@ -13,11 +13,12 @@ bp = Blueprint('dataset', __name__, url_prefix='/dataset')
 
 datumRepository = DatumRepository()
 
-@bp.route('/', methods=['GET'])
+@bp.route('/', methods=['GET'], strict_slashes=False)
 def getDataset():
     json = request.get_json()
     if json is None or 'RowKey' not in json.keys() or json['RowKey'] is None:
         result = datumRepository.read()
+        result = [i.__dict__ for i in result]
         return JSONEncoder().encode(result)
     
     return getDatum(json['RowKey'])
@@ -30,32 +31,38 @@ def getDatum(RowKey=''):
         template = Template('Datum of RowKey "$RowKey" not found')
         return template.substitute(RowKey=RowKey), 404
 
-    print(result)
+    result = result.__dict__
     
     return JSONEncoder().encode(result)
 
-@bp.route('/', methods=['POST'])
+@bp.route('/', methods=['POST'], strict_slashes=False)
 def postDatum():
     json = request.get_json()
-    if json is None:
-        return 'No JSON', 400
-    if 'id' not in json.keys() or json['id'] is None:
-        return 'id field is required', 400
-    if 'data' not in json.keys() or json['data'] is None:
-        return 'data field is required', 400
+
+    try:
+        newDatum = Datum(json)
+    except:
+        return 'Bad Request', 400
     
-    etag = datumRepository.create(Datum(json))
+    try:
+        etag = datumRepository.create(newDatum)
+    except:
+        return JSONEncoder().encode({ 'success': False, 'etag': '' })
 
-    return JSONEncoder().encode({ 'etag': etag })
+    return JSONEncoder().encode({ 'success': True, 'etag': etag })
 
-@bp.route('/', methods=['DELETE'])
+@bp.route('/', methods=['DELETE'], strict_slashes=False)
 def deleteDatum():
     json = request.get_json()
-    if json is None:
-        return 'No JSON', 400
-    if 'RowKey' not in json.keys() or json['RowKey'] is None:
-        return 'id field is required', 400
 
-    datumRepository.delete(json.RowKey)
-    
-    return True
+    try:
+        rowKey = json.RowKey
+    except:
+        return 'Bad Request', 400
+
+    try:
+        datumRepository.delete(rowKey)
+    except:
+        return JSONEncoder().encode({ 'success': False })
+
+    return JSONEncoder().encode({ 'success': True })
