@@ -12,7 +12,6 @@ class DatumRepository:
 	
 	def __init__(self):
 		self.tableService = TableService(connection_string=environ['CUSTOMCONNSTR_DatabaseConnectionString'])
-		#self.tableService.create_table('dataset')
 		self.tableName = 'dataset'
 		self.PartitionKey = 'dataset'
 
