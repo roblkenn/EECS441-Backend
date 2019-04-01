@@ -25,7 +25,10 @@ def getDataset():
 
 def getDatum(RowKey=''):
 
-    result = datumRepository.read(RowKey=RowKey)
+    try:
+        result = datumRepository.read(RowKey=RowKey)
+    except:
+        return 'Not Found', 404
 
     if result is None:
         template = Template('Datum of RowKey "$RowKey" not found')
