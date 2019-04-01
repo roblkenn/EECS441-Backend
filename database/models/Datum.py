@@ -1,10 +1,12 @@
 
 class Datum:
-	def __init__(self, entity):
-		self.entity = entity
-		self.imageBase64 = entity.imageBase64
-		self.contrast = entity.contrast
-		self.brightness = entity.brightness
-		self.saturation = entity.saturation
-		self.tempurature = entity.tempurature
-		self.highlights = entity.highlights
+	def __init__(self, other):
+		self.PartitionKey = other.PartitionKey or ''
+		self.RowKey = other.RowKey or ''
+		self.imageBase64 = other.imageBase64
+		self.contrast = other.contrast
+		self.brightness = other.brightness
+		self.saturation = other.saturation
+		self.tempurature = other.tempurature
+		self.highlights = other.highlights
+		

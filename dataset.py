@@ -1,5 +1,8 @@
 import functools
 from string import Template
+from database.repositories.DatumRepository import DatumRepository
+from database.models.Datum import Datum
+from json import JSONEncoder, JSONDecoder
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for,
@@ -8,21 +11,28 @@ from flask import (
 
 bp = Blueprint('dataset', __name__, url_prefix='/dataset')
 
+datumRepository = DatumRepository()
+
 @bp.route('/', methods=['GET'])
 def getDataset():
     json = request.get_json()
-    if json is None or 'id' not in json.keys() or json['id'] is None:
-        return '[ { "id": "0", "data": "*data0" }, { "id": "1", "data": "*data1" }, { "id": "2", "data": "*data2" } ]'
+    if json is None or 'RowKey' not in json.keys() or json['RowKey'] is None:
+        result = datumRepository.read()
+        return JSONEncoder().encode(result)
     
-    return getDatum(json['id'])
+    return getDatum(json['RowKey'])
 
-def getDatum(id=''):
-    if id == 'error':
-        template = Template('Datum of id "$id" not found')
-        return template.substitute(id=id), 404
-    else:
-        template = Template('{ "id": $id, "data": "*data*" }')
-        return template.substitute(id=id)
+def getDatum(RowKey=''):
+
+    result = datumRepository.read(RowKey=RowKey)
+
+    if result is None:
+        template = Template('Datum of RowKey "$RowKey" not found')
+        return template.substitute(RowKey=RowKey), 404
+
+    print(result)
+    
+    return JSONEncoder().encode(result)
 
 @bp.route('/', methods=['POST'])
 def postDatum():
@@ -33,17 +43,19 @@ def postDatum():
         return 'id field is required', 400
     if 'data' not in json.keys() or json['data'] is None:
         return 'data field is required', 400
+    
+    etag = datumRepository.create(Datum(json))
 
-    template = Template('{ "id": "$id" "data": "$data" }')
-    return template.substitute(id=json['id'], data=json['data'])
+    return JSONEncoder().encode({ 'etag': etag })
 
 @bp.route('/', methods=['DELETE'])
 def deleteDatum():
     json = request.get_json()
     if json is None:
         return 'No JSON', 400
-    if 'id' not in json.keys() or json['id'] is None:
+    if 'RowKey' not in json.keys() or json['RowKey'] is None:
         return 'id field is required', 400
 
-    template = Template('{ "succeeded": true, "message": "datum {id} remove from dataset" }')
-    return template.substitute(id=id)
+    datumRepository.delete(json.RowKey)
+    
+    return True
