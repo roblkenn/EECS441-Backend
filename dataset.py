@@ -44,12 +44,14 @@ def postDatum():
 
     try:
         newDatum = Datum(json)
-    except:
+    except Exception as e:
+        print(e)
         return 'Bad Request', 400
     
     try:
         etag = datumRepository.create(newDatum)
-    except:
+    except Exception as e:
+        print(e)
         return JSONEncoder().encode({ 'success': False, 'etag': '' })
 
     return JSONEncoder().encode({ 'success': True, 'etag': etag })

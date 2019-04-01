@@ -11,8 +11,7 @@ def generateRowKey():
 class DatumRepository:
 	
 	def __init__(self):
-		#self.tableService = TableService(connection_string=environ['CUSTOMCONNSTR_DatabaseConnectionString'])
-		self.tableService = TableService(connection_string='DefaultEndpointsProtocol=https;AccountName=styles-db;AccountKey=GKnYYUiWGAPVQuu7qjqPDUrfESoMQLrQ2YZmAahqW6WnSkwICAxd8yj3G2OlZMA27VPVmAECrcrBwq8bJfmjXg==;TableEndpoint=https://styles-db.table.cosmos.azure.com:443/;')
+		self.tableService = TableService(connection_string=environ['CUSTOMCONNSTR_DatabaseConnectionString'])
 		#self.tableService.create_table('dataset')
 		self.tableName = 'dataset'
 		self.PartitionKey = 'dataset'
@@ -25,7 +24,7 @@ class DatumRepository:
 		entity.imageBase64 = datum.imageBase64
 		entity.contrast = datum.contrast
 		entity.brightness = datum.brightness
-		entity.tempurature = datum.tempurature
+		entity.temperature = datum.temperature
 		entity.saturation = datum.saturation
 
 		return self.tableService.insert_entity(self.tableName, entity)
