@@ -61,13 +61,15 @@ def deleteDatum():
     json = request.get_json()
 
     try:
-        rowKey = json.RowKey
-    except:
+        rowKey = json['RowKey']
+    except Exception as e:
+        print(e)
         return 'Bad Request', 400
 
     try:
         datumRepository.delete(rowKey)
-    except:
+    except Exception as e:
+        print(e)
         return JSONEncoder().encode({ 'success': False })
 
     return JSONEncoder().encode({ 'success': True })
