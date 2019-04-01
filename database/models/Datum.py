@@ -6,7 +6,14 @@ class Datum:
 		self.RowKey = other.RowKey if hasattr(other, 'RowKey') else ''
 
 		self.imageBase64 = other['imageBase64']
-		self.contrast = other['contrast']
-		self.brightness = other['brightness']
-		self.saturation = other['saturation']
-		self.temperature = other['temperature']
+
+		if isinstance(other, Entity):
+			self.contrast = other.contrast
+			self.brightness = other.brightness
+			self.saturation = other.saturation
+			self.temperature = other.temperature
+		else:
+			self.contrast = other['contrast']
+			self.brightness = other['brightness']
+			self.saturation = other['saturation']
+			self.temperature = other['temperature']
