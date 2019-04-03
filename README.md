@@ -16,6 +16,7 @@ Dependencies
 ```
 pip install flask
 pip install azure-cosmosdb-table
+pip install azure-storage-blob
 ```
 Running Flask App in Development Mode
 ```
