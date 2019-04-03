@@ -55,14 +55,6 @@ Windows:
 - put : Update payment info for user
 - delete : Remove payment info for user
 
-/analytics
-- get : Retrieve an analytics event
-- post : Create a new analytics event
-- delete : Remove an analytics event
-
-/auth/{login,logout,register}
-- post: login, logout, register a user
-
 ## Reference Material
 [Azure Table Storage Documentation](https://docs.microsoft.com/en-us/azure/cosmos-db/table-storage-how-to-use-python)
 
