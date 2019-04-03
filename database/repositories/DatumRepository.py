@@ -20,7 +20,7 @@ class DatumRepository:
 		entity = Entity()
 		entity.PartitionKey = self.PartitionKey
 		entity.RowKey = generateRowKey()
-		entity.imageBase64 = EntityProperty(EdmType.STRING, datum.imageBase64)
+		entity.blobName = EntityProperty(EdmType.STRING, datum.blobName)
 		entity.contrast = EntityProperty(EdmType.DOUBLE, datum.contrast)
 		entity.brightness = EntityProperty(EdmType.DOUBLE, datum.brightness)
 		entity.temperature = EntityProperty(EdmType.DOUBLE, datum.temperature)

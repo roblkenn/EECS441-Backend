@@ -5,7 +5,7 @@ class Datum:
 		self.PartitionKey = other.PartitionKey if hasattr(other, 'PartitionKey') else ''
 		self.RowKey = other.RowKey if hasattr(other, 'RowKey') else ''
 
-		self.imageBase64 = other['imageBase64']
+		self.blobName = other['blobName']
 
 		if isinstance(other, Entity):
 			self.contrast = other.contrast.value

@@ -1,6 +1,7 @@
 import functools
 from string import Template
 from database.repositories.DatumRepository import DatumRepository
+from database.repositories.ImageRepository import ImageRepository
 from database.models.Datum import Datum
 from json import JSONEncoder, JSONDecoder
 
@@ -11,6 +12,7 @@ from flask import (
 
 bp = Blueprint('dataset', __name__, url_prefix='/dataset')
 
+imageRepository = ImageRepository()
 datumRepository = DatumRepository()
 
 @bp.route('/', methods=['GET'], strict_slashes=False)
@@ -41,6 +43,16 @@ def getDatum(RowKey=''):
 @bp.route('/', methods=['POST'], strict_slashes=False)
 def postDatum():
     json = request.get_json()
+
+    if not all(k in json.keys() for k in ('imageBase64', 'contrast', 'brightness', 'saturation', 'temperature')):
+        return 'Bad Request', 400
+        
+    try:
+        blobName = imageRepository.create(json['imageBase64'])
+        json['blobName'] = blobName
+    except Exception as e:
+        print(e)
+        return JSONEncoder().encode({ 'success': False, 'etag': '' })
 
     try:
         newDatum = Datum(json)
