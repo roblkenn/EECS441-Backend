@@ -1,5 +1,5 @@
 from keras.models import Sequential,save_model
-from keras.layers import Dense, Input
+from keras.layers import Dense, Input, Conv2D, Flatten
 from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
@@ -16,30 +16,34 @@ datumRepository = DatumRepository()
 EPOCHS = 75
 INIT_LR = 1e-3
 BS = 32
-# IMAGE_DIMS
 IMAGE_DIMS = (100, 100, 3)
 
 def dense_layers(X, y):
+    '''
+    A 2 dense layes model
+    '''
 
-    # X should in shape (n, chanel, height width)
     # y should ve in shape (n,5)
-    samples = X.shape[0]
-    features = np.prod(X.shape[1:])
 
+    ################################################################################
     # samples = 100
     # features = 64
-
     # X, y = make_regression(n_samples=samples, n_features=features, noise=0.1)
     # scalarX, scalarY = MinMaxScaler(), MinMaxScaler()
     # scalarX.fit(X)
     # scalarY.fit(y.reshape(samples,5))
     # X = scalarX.transform(X)
     # y = scalarY.transform(y.reshape(samples,5))
+    ################################################################################
 
     model = Sequential()
 
-    model.add(Dense(64, input_dim=features, kernel_initializer='normal', activation='relu'))
-    model.add(Dense(64, activation='relu'))
+    model.add(Conv2D(64, kernel_size=3, activation=’relu’, input_shape=IMAGE_DIMS))
+    model.add(Conv2D(32, kernel_size=3, activation=’relu’))
+    model.add(Flatten())
+
+    #################################################################################
+    # don't if this is nessecary 
 
     model.summary()
 
@@ -50,7 +54,11 @@ def dense_layers(X, y):
     out5 = Dense(1,  activation='linear')
 
     model = Model(inputs=inputs, outputs=[contra_out,bri_out,temp_out,satu_out,out5])
+
+    ###################################################################################
+
     # optimizer adam? loss mse?? metrics??
+    # tune parameters
     model.compile(optimizer = "rmsprop", loss = 'binary_crossentropy', metrics=['accuracy'])
 
     # , validation_split=0.2
