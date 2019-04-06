@@ -1,29 +1,28 @@
-class Purchase(object):
+import functools
+from string import Template
+import stripe
 
-    def __init__(self, transaction_id, product_id, quantity, purchased_at, response=None):
-        self.transaction_id = transaction_id
-        self.product_id = product_id
-        self.quantity = quantity
-        self.purchased_at = purchased_at
-        self.response = response
+from flask import (
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app, jsonify
+)
 
-    @classmethod
-    def from_app_store_receipt(cls, receipt, response):
-        purchase = {
-            'transaction_id': receipt['transaction_id'],
-            'product_id': receipt['product_id'],
-            'quantity': receipt['quantity'],
-            'purchased_at': receipt['purchase_date'],
-            'response': response,
-        }
-        return cls(**purchase)
+bp = Blueprint('purchase', __name__, url_prefix='/purchase')
 
-    @classmethod
-    def from_google_play_receipt(cls, receipt):
-        purchase = {
-            'transaction_id': receipt.get('orderId', receipt.get('purchaseToken')),
-            'product_id': receipt['productId'],
-            'quantity': 1,
-            'purchased_at': receipt['purchaseTime']
-        }
-        return cls(**purchase)
+stripe.api_key = 'sk_test_vGJklTk0dV19aiOWvP8bk6ik00SDJrMzdh'
+
+@bp.route('', methods=['POST'], strict_slashes=False)
+def initiateCharge():
+	json = request.get_json()
+
+	paymentAmount = json['amount']
+	tokenId = json['tokenId']
+
+	newCharge = stripe.Charge.create(
+		amount=paymentAmount,
+		currency='usd',
+		source=tokenId,
+		description='Test Payment'
+	)
+
+	return 'Success', 200
+	
