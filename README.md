@@ -17,18 +17,13 @@ Dependencies
 pip install flask
 pip install azure-cosmosdb-table
 pip install azure-storage-blob
+pip install stripe
 npm install --save tipsi-stripe
 yarn add stripe
 ```
 Running Flask App in Development Mode
 ```
-MacOSX/Linux:
-  export FLASK_APP=__init__.py
-  export FLASK_ENV=development
-  flask run
-
-Windows:
-  Replace export with set
+  python application.py
 ```
 
 # File Structure
