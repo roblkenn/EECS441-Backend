@@ -14,6 +14,7 @@ stripe.api_key = 'sk_test_vGJklTk0dV19aiOWvP8bk6ik00SDJrMzdh'
 def initiateCharge():
 	json = request.get_json()
 
+	userId = json['userId']
 	paymentAmount = json['amount']
 	tokenId = json['tokenId']
 
