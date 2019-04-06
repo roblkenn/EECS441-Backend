@@ -5,7 +5,7 @@ app.config.from_mapping(
 SECRET_KEY='dev',
 )
 
-@app.route('/hello')
+@app.route('/hello', methods=["GET"])
 def hello():
 	return 'Hello, World!'
 
