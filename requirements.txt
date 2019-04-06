@@ -1,3 +1,4 @@
 flask
 azure-cosmosdb-table
 azure-storage-blob
+stripe

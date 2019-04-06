@@ -18,7 +18,7 @@ class ListingRepository:
 		entity.description = EntityProperty(EdmType.STRING, listing.description)
 		entity.username = EntityProperty(EdmType.STRING, listing.username)
 
-		return self.tableService.insert_entity(self.tableName, entity)
+		return self.tableService.insert_or_merge_entity(self.tableName, entity)
 
 	def read(self, RowKey = None):
 		if RowKey is None:

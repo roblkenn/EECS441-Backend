@@ -126,36 +126,6 @@ def createListing():
 
     return jsonify({ 'success': True, 'etag': etag })
 
-@bp.route('', methods=['PUT'], strict_slashes=False)
-def updateListing():
-    json = request.get_json()
-
-    try:
-        user = User(json)
-    except Exception as e:
-        print(e)
-        return 'Bad Request', 400
-
-    try:
-        user = userRepository.read(RowKey=user.RowKey)
-    except Exception as e:
-        print(e)
-        return 'Unatuhorized', 401
-
-    try:
-        listing = Listing(json)
-    except Exception as e:
-        print(e)
-        return 'Bad Request', 400
-
-    try:
-        etag = listingRepository.update(listing)
-    except Exception as e:
-        print(e)
-        return jsonify({ 'success': False, 'etag': '' })
-
-    return jsonify({ 'success': True, 'etag': etag })
-
 @bp.route('', methods=['DELETE'], strict_slashes=False)
 def deleteListing():
     json = request.get_json()
