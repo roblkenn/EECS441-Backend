@@ -1,4 +1,4 @@
-from keras.models import Sequential,save_model
+from keras.models import Sequential,save_model, Model
 from keras.layers import Dense, Input, Conv2D, Flatten
 from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.model_selection import cross_val_score
@@ -9,6 +9,10 @@ from sklearn.datasets import make_regression
 
 from database.repositories.DatumRepository import DatumRepository
 from database.repositories.ImageRepository import ImageRepository
+
+import cv2
+import os
+import numpy as np
 
 imageRepository = ImageRepository()
 datumRepository = DatumRepository()
@@ -38,22 +42,12 @@ def dense_layers(X, y):
 
     model = Sequential()
 
-    model.add(Conv2D(64, kernel_size=3, activation=’relu’, input_shape=IMAGE_DIMS))
-    model.add(Conv2D(32, kernel_size=3, activation=’relu’))
+    model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=IMAGE_DIMS))
+    model.add(Conv2D(32, kernel_size=3, activation='relu'))
     model.add(Flatten())
-
-    #################################################################################
-    # don't if this is nessecary 
+    model.add(Dense(5, activation='linear'))
 
     model.summary()
-
-    contra_out = Dense(1,  activation='linear')
-    bri_out = Dense(1,  activation='linear')
-    temp_out = Dense(1,  activation='linear')
-    satu_out = Dense(1,  activation='linear')
-    out5 = Dense(1,  activation='linear')
-
-    model = Model(inputs=inputs, outputs=[contra_out,bri_out,temp_out,satu_out,out5])
 
     ###################################################################################
 
@@ -62,7 +56,7 @@ def dense_layers(X, y):
     model.compile(optimizer = "rmsprop", loss = 'binary_crossentropy', metrics=['accuracy'])
 
     # , validation_split=0.2
-    history = model.fit(X, y, epochs=75, batch_size=50,  verbose=1)
+    history = model.fit(X, y, epochs=75, verbose=1)
     
     save_model(model)
 
@@ -77,11 +71,23 @@ def save_model(model):
 
 def image_preprocessing():
     # fixme 'float' object has no attribute 'value'
-    y = datumRepository.read()
-    y = [i.__dict__ for i in y]
-    X = ImageRepository.read()
-    X = [i.__dict__ for i in X]
-    return X,y
+
+    #FIXME IMPROT FROM DATASET
+    # y = datumRepository.read()
+    # y = [i.__dict__ for i in y]
+    # X = ImageRepository.read()
+    # X = [i.__dict__ for i in X]
+    # return X,y
+
+    #import from local dir
+    dircs = os.listdir('./var/')
+    paths = ['./var/'+p for p in dircs]
+    for path in paths:
+        X = [cv2.resize(cv2.imread(path, 1),(100,100)) for path in paths]
+    y = np.random.randint(0, high=100, size=(114,5))
+    X = np.array(X)
+    print(X.shape, y.shape)
+    return X, y
 
 if __name__ == "__main__":
     X, y = image_preprocessing()
