@@ -23,13 +23,7 @@ yarn add stripe
 ```
 Running Flask App in Development Mode
 ```
-MacOSX/Linux:
-  export FLASK_APP=__init__.py
-  export FLASK_ENV=development
-  flask run
-
-Windows:
-  Replace export with set
+  python application.py
 ```
 
 # File Structure
