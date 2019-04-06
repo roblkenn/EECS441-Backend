@@ -17,6 +17,7 @@ Dependencies
 pip install flask
 pip install azure-cosmosdb-table
 pip install azure-storage-blob
+pip install stripe
 npm install --save tipsi-stripe
 yarn add stripe
 ```
