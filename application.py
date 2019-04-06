@@ -15,8 +15,8 @@ app.register_blueprint(auth.bp)
 import dataset
 app.register_blueprint(dataset.bp)
 
-# import sell
-# app.register_blueprint(sell.bp)
+import market
+app.register_blueprint(market.bp)
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0')
