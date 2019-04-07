@@ -121,7 +121,7 @@ def createListing():
     try:
         if (getListing(newListing.RowKey)):
             print("already exist, update lisging")
-            etag = listingRepository.update(newListing)
+            etag = listingRepository.updateListing(newListing)
             return jsonify({ 'success': False, 'etag': etag })
         etag = listingRepository.create(newListing)
     except Exception as e:
