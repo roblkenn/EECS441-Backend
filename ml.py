@@ -23,22 +23,6 @@ BS = 32
 IMAGE_DIMS = (100, 100, 3)
 
 def dense_layers(X, y):
-    '''
-    A 2 dense layes model
-    '''
-
-    # y should ve in shape (n,5)
-
-    ################################################################################
-    # samples = 100
-    # features = 64
-    # X, y = make_regression(n_samples=samples, n_features=features, noise=0.1)
-    # scalarX, scalarY = MinMaxScaler(), MinMaxScaler()
-    # scalarX.fit(X)
-    # scalarY.fit(y.reshape(samples,5))
-    # X = scalarX.transform(X)
-    # y = scalarY.transform(y.reshape(samples,5))
-    ################################################################################
 
     model = Sequential()
 
@@ -49,14 +33,11 @@ def dense_layers(X, y):
 
     model.summary()
 
-    ###################################################################################
-
-    # optimizer adam? loss mse?? metrics??
-    # tune parameters
-    model.compile(optimizer = "rmsprop", loss = 'binary_crossentropy', metrics=['accuracy'])
+    # optimizer = "rmsprop" 
+    model.compile(optimizer = "adam", loss = 'mse', metrics=['accuracy'])
 
     # , validation_split=0.2
-    history = model.fit(X, y, epochs=75, verbose=1)
+    history = model.fit(X, y, epochs=10, verbose=1)
     
     save_model(model)
 
