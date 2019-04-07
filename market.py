@@ -126,6 +126,39 @@ def createListing():
 
     return jsonify({ 'success': True, 'etag': etag })
 
+@bp.route('updateListing', methods=['POST'], strict_slashes=False)
+def updateListing():
+    json = request.get_json()
+
+    try:
+        user = User(json)
+    except Exception as e:
+        print(e)
+        return 'Bad Request', 400
+
+    try:
+        user = userRepository.read(RowKey=user.RowKey)
+    except Exception as e:
+        return 'Bad Request', 400
+
+    try:
+        newListing = Listing(json)
+    except Exception as e:
+        print(e)
+        return 'Bad Request', 400
+    
+    try:
+        if (getListing(newListing.RowKey)):
+            print("already exist, update lisging")
+            etag = listingRepository.updateListing(newListing)
+        else:
+            return 'Bad Request', 400
+    except Exception as e:
+        print(e)
+        return 'Bad Request', 500
+
+    return jsonify({ 'success': True, 'etag': etag })
+
 @bp.route('', methods=['DELETE'], strict_slashes=False)
 def deleteListing():
     json = request.get_json()
