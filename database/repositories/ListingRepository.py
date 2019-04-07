@@ -35,6 +35,15 @@ class ListingRepository:
 
 	def update(self, entity):
 		self.tableService.update_entity(self.tableName, entity)
+	
+	def updateListing(self, listing):
+		entity = self.tableService.get_entity(self.tableName, self.PartitionKey, listing.RowKey)
+		entity.title = EntityProperty(EdmType.STRING, listing.title)
+		entity.price = EntityProperty(EdmType.INT32, listing.price)
+		entity.description = EntityProperty(EdmType.STRING, listing.description)
+		entity.username = EntityProperty(EdmType.STRING, listing.username)
+		
+		return self.tableService.update_entity(self.tableName, entity)
 
 	def delete(self, RowKey):
 		self.tableService.delete_entity(self.tableName, self.PartitionKey, RowKey)
