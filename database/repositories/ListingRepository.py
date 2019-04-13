@@ -12,7 +12,7 @@ class ListingRepository:
 	def create(self, listing):
 		entity = Entity()
 		entity.PartitionKey = self.PartitionKey
-		entity.RowKey = listing.RowKey
+		entity.RowKey = listing.id
 		entity.title = EntityProperty(EdmType.STRING, listing.title)
 		entity.price = EntityProperty(EdmType.INT32, listing.price)
 		entity.description = EntityProperty(EdmType.STRING, listing.description)
