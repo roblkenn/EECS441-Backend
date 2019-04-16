@@ -1,4 +1,4 @@
-from tensorflow.keras.models import Sequential,save_model, Model
+from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Input, Conv2D, Flatten
 from tensorflow.keras.wrappers.scikit_learn import KerasRegressor
 from tensorflow.keras.image_preprocessing.image import ImageDataGenerator
@@ -80,11 +80,14 @@ def plot_history(history):
 
 def save_model(model):
     # serialize model to JSON
-    model_json = model.to_json()
-    with open("model.json", "w") as json_file:
-        json_file.write(model_json)
+#     model_json = model.to_json()
+#     with open("model.json", "w") as json_file:
+#         json_file.write(model_json)
     # serialize weights to HDF5
-    model.save_weights("model.h5")
+    #     model.save("model.h5")
+
+    # Serialize to tensorflowjs model
+    tfjs.converters.save_keras_model(model, '')
 
 def load_dataset():
     with open('./dataset/dataset.json', 'r') as file:
