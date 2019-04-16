@@ -5,7 +5,7 @@ from database.repositories.ImageRepository import ImageRepository
 from json import JSONEncoder
 import os
 
-dataset = DatumRepository().read()
+datasetRaw = DatumRepository().read()
 imageRepo = ImageRepository()
 
 dataset = []
@@ -15,8 +15,13 @@ try:
 except Exception:
     pass
 
-for i, item in enumerate(dataset):
-	dataset.append(item)
+print('Size of dataset: ' + str(len(datasetRaw)))
+
+for item in datasetRaw:
+	itemDict = item.__dict__
+	itemDict.pop('PartitionKey', None)
+	itemDict.pop('RowKey', None)
+	dataset.append(itemDict)
 
 	blobName = item.blobName
 	imageBlob = imageRepo.read(blobName)
