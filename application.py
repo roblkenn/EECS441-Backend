@@ -21,5 +21,8 @@ app.register_blueprint(market.bp)
 import purchase
 app.register_blueprint(purchase.bp)
 
+import machinelearning
+app.register_blueprint(machinelearning.bp)
+
 if __name__ == "__main__":
 	app.run(host='0.0.0.0')
