@@ -1,1 +1,2 @@
+apt install libgtk2.0-dev -y
 gunicorn --bind=0.0.0.0 --timeout 600 application:app
