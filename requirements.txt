@@ -2,3 +2,8 @@ flask
 azure-cosmosdb-table
 azure-storage-blob
 stripe
+tensorflow
+sklearn
+pandas
+numpy
+opencv-python

@@ -5,6 +5,7 @@ from database.repositories.ListingRepository import ListingRepository
 from database.repositories.UserRepository import UserRepository
 from database.models.Listing import Listing
 from database.models.User import User
+from transferlearning import run_user_model, train_user_model, create_user_model
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app, jsonify
@@ -25,7 +26,9 @@ def editPhoto():
 	if 'imageBase64' not in json.keys():
 		return 'Bad Request', 400
 
-	return jsonify([1, 1, 1, 1])
+	result = run_user_model(json['modelId'], json['imageBase64'])
+
+	return jsonify(result)
 
 @bp.route('', methods=['POST'], strict_slashes=False)
 def trainModel():
@@ -43,6 +46,6 @@ def trainModel():
 	if json['modelId'] != json['userId']:
 		return 'Done', 200
 
-	# Train model
+	train_user_model(json['userId'], json['imageBase64'], json['contrast'], json['brightness'], json['temperature'], json['saturation'])
 
 	return 'Done', 200
