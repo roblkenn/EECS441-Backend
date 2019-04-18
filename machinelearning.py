@@ -5,7 +5,7 @@ from database.repositories.ListingRepository import ListingRepository
 from database.repositories.UserRepository import UserRepository
 from database.models.Listing import Listing
 from database.models.User import User
-from transferlearning import run_user_model, train_user_model, create_user_model
+from transferlearning import run_user_model, train_user_model
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app, jsonify

@@ -10,7 +10,9 @@ from json import JSONDecoder
 from database.repositories.ModelBlobRepository import ModelBlobRepository
 from database.models.Blob import Blob
 from base64 import b64decode
+from tensorflow.keras.utils import normalize
 
+import tensorflow as tf
 import pandas as pd
 from cv2 import resize, imread
 import cv2
@@ -20,20 +22,6 @@ import os
 
 modelBlobRepo = ModelBlobRepository()
 
-def create_user_model(userId):
-	model = load_model('pretrained.h5')
-
-	x = model.output
-	x = Dense(256, activation='relu')(x)
-	x = Dropout(0.5)(x)
-	x = Dense(256, activation='relu')(x)
-	predictions = Dense(4, activation='linear')(x)
-
-	transfer_model = Model(inputs = model.input, outputs = predictions)
-	transfer_model.compile(optimizer = "adam", loss = 'mse', metrics=['mean_absolute_error', 'mean_squared_error'])
-
-	return transfer_model
-
 def train_user_model(userId, imageBase64, contrast, brightness, temperature, saturation):
 	image = b64decode(imageBase64)
 	imageName = str(uuid.uuid4()) + '.jpg'
@@ -41,7 +29,7 @@ def train_user_model(userId, imageBase64, contrast, brightness, temperature, sat
 	with open(imageName, 'wb') as file:
 		file.write(image)
 
-	X = [resize(imread(imageName, 1), (100,100))]
+	X = [resize(imread(imageName, 1), (50,50))]
 	os.remove(imageName)
 	y = [contrast, brightness, temperature, saturation]
 
@@ -59,24 +47,39 @@ def train_user_model(userId, imageBase64, contrast, brightness, temperature, sat
 	save_user_model(model, userId)
 
 def run_user_model(userId, imageBase64):
+	print('run_user_model: ' + userId)
+
+	print('writing image to disk...')
 	imageBytes = b64decode(imageBase64)
 	imageName = str(uuid.uuid4()) + '.jpg'
 
 	with open(imageName, 'wb') as file:
 		file.write(imageBytes)
+	print('image writed to disk!')
 
-	image = cv2.resize(cv2.imread(imageName, 1), (100,100))
+	X = [cv2.resize(cv2.imread(imageName, 1), (50,50))]
+	X = np.array(X)
+	normalize(X)
+	print('removing image from disk')
 	os.remove(imageName)
 	model = get_user_model(userId)
 
-	return model(image)
+	y = model.predict(X)
+	print(y[0].tolist())
+
+	return y[0].tolist()
 
 
 def get_user_model(userId):
+	print('get_user_model: ' + userId)
 	try:
 		modelBlob = modelBlobRepo.read(userId)
 	except:
-		return create_user_model(userId)
+		print('Model not found loading pretrained.h5...')
+		model = load_model('pretrained.h5')
+		model.compile(optimizer = "adam", loss = 'mse')
+		print('Model loaded!')
+		return model
 	
 	with open(userId + '.h5', 'wb') as file:
 		file.write(modelBlob.content)
