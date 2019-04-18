@@ -12,6 +12,7 @@ from database.models.Blob import Blob
 from base64 import b64decode
 
 import pandas as pd
+from cv2 import resize, imread
 import cv2
 import numpy as np
 import uuid
@@ -40,7 +41,7 @@ def train_user_model(userId, imageBase64, contrast, brightness, temperature, sat
 	with open(imageName, 'wb') as file:
 		file.write(image)
 
-	X = [cv2.resize(cv2.imread(imageName, 1), (100,100))]
+	X = [resize(imread(imageName, 1), (100,100))]
 	os.remove(imageName)
 	y = [contrast, brightness, temperature, saturation]
 
