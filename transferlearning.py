@@ -11,7 +11,6 @@ from database.repositories.ModelBlobRepository import ModelBlobRepository
 from database.models.Blob import Blob
 from base64 import b64decode
 
-import matplotlib.pyplot as plt
 import pandas as pd
 import cv2
 import numpy as np
